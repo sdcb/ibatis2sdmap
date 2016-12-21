@@ -27,13 +27,12 @@ namespace ibatis2sdmap
                 "}";
         }
 
-        public static IObservable<SqlItem> Create(XElement sqlMapNode)
+        public static IEnumerable<SqlItem> Create(XElement sqlMapNode)
         {
             var ns = sqlMapNode.Attribute("namespace").Value;
             return sqlMapNode
-                .Nodes().OfType<XElement>() // statements
+                .Descendants($"{{{AppConfig.NsPrefix}}}statements") // statements
                 .Nodes().OfType<XElement>() // select, sql, ...
-                .ToObservable()
                 .Select(x => new SqlItem
                 {
                     Id  = x.Attribute("id").Value, 

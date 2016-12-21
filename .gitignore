@@ -250,3 +250,4 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/ibatis2sdmap/src/ibatis2sdmap/Destination

@@ -6,25 +6,23 @@ using System.Xml.Linq;
 
 namespace ibatis2sdmap.SqlSegments
 {
-    public class PredicateSegment : SqlSegment
+    public class PredicateValSegment : SqlSegment
     {
         public string MacroName { get; }
 
         public string Property { get; }
 
-        public string Properties { get; }
-
         public string Prepend { get; }
+
+        public string CompareValue { get; }
 
         public IEnumerable<SqlSegment> Segments { get; }
 
-        public PredicateSegment(XElement xe, string macroName)
+        public PredicateValSegment(XElement xe, string macroName)
         {
+            // compareValue
             Property = xe.Attribute("property")?.Value;
-            Properties = xe.Attribute("properties")?.Value;
-
-            if (Property == null && Properties == null)
-                throw new ArgumentException(nameof(xe));
+            CompareValue = xe.Attribute("compareValue").Value;
 
             Prepend = xe.Attribute("prepend")?.Value ?? "";
             Segments = xe.Nodes().Select(Create);
@@ -34,7 +32,7 @@ namespace ibatis2sdmap.SqlSegments
         public override string Emit()
         {
             return
-                $"#{MacroName}<{Property ?? Properties}, sql{{" +
+                $"#{MacroName}<{Property}, '{CompareValue}', sql{{" +
                 $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
                 $"}}>";
         }

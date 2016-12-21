@@ -19,30 +19,32 @@ namespace ibatis2sdmap.SqlSegments
             else if (node is XElement)
             {
                 var xe = (XElement)node;
-                if (xe.Name.LocalName == "include")
+                switch (xe.Name.LocalName)
                 {
-                    return new IncludeSegment(xe);
+                    case "isPropertyAvailable":
+                    case "isNull":
+                    case "isNotNull":
+                    case "isEmpty":
+                    case "isNotEmpty":
+                        return new PredicateSegment(xe, xe.Name.LocalName);
+                    case "isEqual":
+                    case "isNotEqual":
+                    case "isLike":
+                    case "isNotLike":
+                        return new PredicateValSegment(xe, xe.Name.LocalName);
+                    case "include":
+                        return new IncludeSegment(xe);
+                    case "iterate":
+                        return new IterateSegment(xe);                    
+                    case "selectKey":
+                        return new SelectKeySegment(xe);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(xe.Name.LocalName));
                 }
-                else if (xe.Name.LocalName == "isPropertyAvailable")
-                {
-                    return new HasPropSegment(xe);
-                }
-                else if (xe.Name.LocalName == "isNotNull")
-                {
-                    return new PredicateSegment(xe, "isNotNull");
-                }
-                else if (xe.Name.LocalName == "isNotEmpty")
-                {
-                    return new PredicateSegment(xe, "isNotEmpty");
-                }
-                else if (xe.Name.LocalName == "isEmpty")
-                {
-                    return new PredicateSegment(xe, "isEmpty");
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(xe.Name.LocalName));
-                }
+            }
+            else if (node is XComment)
+            {
+                return new CommentSegment((XComment)node);
             }
             else
             {
