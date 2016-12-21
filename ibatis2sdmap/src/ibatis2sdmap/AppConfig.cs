@@ -22,5 +22,7 @@ namespace ibatis2sdmap
         public static string IBatisXmlDirectory => Configuration[nameof(IBatisXmlDirectory)];
 
         public static string DestinationDirectory => Configuration[nameof(DestinationDirectory)];
+
+        public const string NsPrefix = "http://ibatis.apache.org/mapping";
     }
 }
