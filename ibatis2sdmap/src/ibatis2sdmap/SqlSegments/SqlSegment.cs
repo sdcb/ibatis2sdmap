@@ -22,6 +22,7 @@ namespace ibatis2sdmap.SqlSegments
                 switch (xe.Name.LocalName)
                 {
                     case "isPropertyAvailable":
+                        return new PredicateSegment(xe, "hasProp");
                     case "isNull":
                     case "isNotNull":
                     case "isEmpty":
@@ -35,7 +36,7 @@ namespace ibatis2sdmap.SqlSegments
                     case "include":
                         return new IncludeSegment(xe);
                     case "iterate":
-                        return new IterateSegment(xe);                    
+                        return new IterateSegment(xe);
                     case "selectKey":
                         return new SelectKeySegment(xe);
                     default:
