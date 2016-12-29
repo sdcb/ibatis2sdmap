@@ -15,32 +15,38 @@ namespace ibatis2sdmap
         {
             Directory.CreateDirectory(AppConfig.DestinationDirectory);
             FileUtil.EnumerateConfigFiles(AppConfig.IBatisXmlDirectory)
-                .Select(XDocument.Load)
-                .SelectMany(x => x.Descendants($"{{{AppConfig.NsPrefix}}}sqlMap"))
-                .SelectMany(SqlItem.Create)
-                .GroupBy(x => x.Namespace)
-                .Subscribe(Save);
-        }
-
-        public static void Save(IGroupedObservable<string, SqlItem> v)
-        {
-            var filename = Path.Combine(AppConfig.DestinationDirectory, v.Key + ".sdmap");
-            var file = new StreamWriter(File.OpenWrite(filename));
-            file.WriteLine($"namespace {v.Key}");
-            file.WriteLine("{");
-            v.Select(x => x.Emit())
-                .SubscribeOn(ImmediateScheduler.Instance)
-                .Subscribe(file.WriteLine, () =>
+                .Do(file =>
                 {
-                    file.WriteLine("}");
-                    file.Flush();
-                    file.Dispose();
-                });
+                    XDocument.Load(file)
+                        .Descendants($"{{{AppConfig.NsPrefix}}}sqlMap")
+                        .SelectMany(SqlItem.Create)
+                        .GroupBy(x => x.Namespace)
+                        .ToObservable()
+                        .Subscribe(x => Save(file, x));
+                })
+                .Wait();
         }
 
-        public static void Print(SqlItem item)
+        public static void Save(string oldfilename, IGrouping<string, SqlItem> v)
         {
-            Console.WriteLine(item.Emit());
+            var filename = Path.GetFileNameWithoutExtension(oldfilename);
+            var relative = Path.GetDirectoryName(
+                FileUtil.GetRelativePath(oldfilename, AppConfig.IBatisXmlDirectory + @"\"));
+            var dir = Path.Combine(AppConfig.DestinationDirectory, relative);
+            var path = Path.Combine(dir, filename + ".sdmap");
+
+            Directory.CreateDirectory(dir);
+            using (var file = new StreamWriter(File.OpenWrite(path)))
+            {
+                file.WriteLine($"namespace {v.Key}");
+                file.WriteLine("{");
+                v.Select(x => x.Emit())
+                    .ToObservable()
+                    .SubscribeOn(TaskPoolScheduler.Default)
+                    .Do(file.WriteLine)
+                    .Wait();
+                file.WriteLine("}");
+            }   
         }
     }
 }
