@@ -12,7 +12,7 @@ namespace ibatis2sdmap.SqlSegments
 
         public string Property { get; }
 
-        public string Properties { get; }
+        public string[] Properties { get; }
 
         public string Prepend { get; }
 
@@ -21,7 +21,7 @@ namespace ibatis2sdmap.SqlSegments
         public PredicateSegment(XElement xe, string macroName)
         {
             Property = xe.Attribute("property")?.Value;
-            Properties = xe.Attribute("properties")?.Value;
+            Properties = xe.Attribute("properties")?.Value.Split(',');
 
             if (Property == null && Properties == null)
                 throw new ArgumentException(nameof(xe));
@@ -33,10 +33,23 @@ namespace ibatis2sdmap.SqlSegments
 
         public override string Emit()
         {
-            return
-                $"#{MacroName}<{Property ?? Properties}, sql{{" +
-                $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
-                $"}}>";
+            if (Property != null)
+            {
+                return
+                    $"#{MacroName}<{Property}, sql{{" +
+                    $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
+                    $"}}>";
+            }
+            else
+            {
+                return string.Join("\r\n", Properties.Select(prop =>
+                {
+                    return
+                        $"#{MacroName}<{prop}, sql{{" +
+                        $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
+                        $"}}>";
+                }));
+            }
         }
     }
 }
