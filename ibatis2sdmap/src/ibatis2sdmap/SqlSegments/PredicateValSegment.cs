@@ -32,7 +32,7 @@ namespace ibatis2sdmap.SqlSegments
         public override string Emit()
         {
             return
-                $"#{MacroName}<{Property}, '{CompareValue}', sql{{" +
+                $"#{MacroName}<{Property}, @\"{CompareValue}\", sql{{" +
                 $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
                 $"}}>";
         }
