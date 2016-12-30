@@ -21,7 +21,9 @@ namespace ibatis2sdmap.SqlSegments
 
         public override string Emit()
         {
-            var rep1 = Text.Replace("$value$", "#val<>");
+            var rep1 = Text
+                .Replace("$value$", "#val<>")
+                .Replace("#value#", "#val<>");
             var rep2 = reg2.Replace(rep1, "@$1");
             var rep3 = reg3.Replace(rep2, $"#prop<$1>");
             return rep3;

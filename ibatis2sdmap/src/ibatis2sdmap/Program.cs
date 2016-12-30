@@ -15,7 +15,7 @@ namespace ibatis2sdmap
         {
             Directory.CreateDirectory(AppConfig.DestinationDirectory);
             FileUtil.EnumerateConfigFiles(AppConfig.IBatisXmlDirectory)
-                .Do(file =>
+                .Subscribe(file =>
                 {
                     XDocument.Load(file)
                         .Descendants($"{{{AppConfig.NsPrefix}}}sqlMap")
@@ -23,8 +23,23 @@ namespace ibatis2sdmap
                         .GroupBy(x => x.Namespace)
                         .ToObservable()
                         .Subscribe(x => Save(file, x));
-                })
-                .Wait();
+                });
+        }
+
+        public static void SaveToOne(IGrouping<string, SqlItem> v)
+        {
+            var filename = Path.Combine(AppConfig.DestinationDirectory, "one.sdmap");
+            using (var file = new StreamWriter(File.Open(filename, FileMode.Append)))
+            {
+                file.WriteLine($"namespace {v.Key}");
+                file.WriteLine("{");
+                v.Select(x => x.Emit())
+                    .ToObservable()
+                    .SubscribeOn(TaskPoolScheduler.Default)
+                    .Do(file.WriteLine)
+                    .Wait();
+                file.WriteLine("}\r\n\r\n");
+            }
         }
 
         public static void Save(string oldfilename, IGrouping<string, SqlItem> v)
@@ -46,7 +61,7 @@ namespace ibatis2sdmap
                     .Do(file.WriteLine)
                     .Wait();
                 file.WriteLine("}");
-            }   
+            }
         }
     }
 }

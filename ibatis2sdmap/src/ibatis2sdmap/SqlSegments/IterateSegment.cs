@@ -32,10 +32,7 @@ namespace ibatis2sdmap.SqlSegments
         {
             if (Property != null)
             {
-                return 
-                    $"{Open}#each<{Property}, '{Conjunction}', sql{{\r\n" + 
-                    $"{string.Concat(Segments.Select(x => x.Emit()))}" + 
-                    $"}}{Close}";
+                return $"@{Property}";
             }
             else
             {
