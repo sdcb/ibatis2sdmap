@@ -32,9 +32,32 @@ namespace ibatis2sdmap.SqlSegments
         public override string Emit()
         {
             return
-                $"#{MacroName}<{Property}, @\"{CompareValue}\", sql{{" +
+                $"#{MacroName}<{Property}, {GetFinalPresentValue(CompareValue)}, sql{{" +
                 $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
                 $"}}>";
+        }
+
+        public static string GetFinalPresentValue(string val)
+        {
+            bool bv;
+            if (bool.TryParse(val, out bv))
+            {
+                return bv.ToString().ToLowerInvariant();
+            }
+
+            decimal dv;
+            if (decimal.TryParse(val, out dv))
+            {
+                return val;
+            }
+
+            DateTime dtv;
+            if (DateTime.TryParse(val, out dtv))
+            {
+                return val;
+            }
+
+            return $"@\"{val}\"";
         }
     }
 }
