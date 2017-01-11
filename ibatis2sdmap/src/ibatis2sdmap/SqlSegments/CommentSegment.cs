@@ -17,7 +17,7 @@ namespace ibatis2sdmap.SqlSegments
 
         public override string Emit()
         {
-            return $"/* {Comment} */";
+            return "";
         }
     }
 }

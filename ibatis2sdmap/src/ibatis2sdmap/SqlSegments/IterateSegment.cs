@@ -39,7 +39,7 @@ namespace ibatis2sdmap.SqlSegments
                 return
                     $"{Open}#iterate<'{Conjunction}', sql{{\r\n" +
                     $"{string.Concat(Segments.Select(x => x.Emit()))}" +
-                    $"}}{Close}";
+                    $"}}>{Close}";
             }
         }
     }

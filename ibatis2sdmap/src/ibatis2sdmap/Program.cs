@@ -13,6 +13,9 @@ namespace ibatis2sdmap
     {
         public static void Main(string[] args)
         {
+            var filename = Path.Combine(AppConfig.DestinationDirectory, "one.sdmap");
+            File.Delete(filename);
+
             Directory.CreateDirectory(AppConfig.DestinationDirectory);
             FileUtil.EnumerateConfigFiles(AppConfig.IBatisXmlDirectory)
                 .Subscribe(file =>
@@ -22,7 +25,7 @@ namespace ibatis2sdmap
                         .SelectMany(SqlItem.Create)
                         .GroupBy(x => x.Namespace)
                         .ToObservable()
-                        .Subscribe(x => Save(file, x));
+                        .Subscribe(x => SaveToOne(x));
                 });
         }
 
