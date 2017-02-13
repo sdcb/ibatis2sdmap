@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sdmap.Compiler;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace ibatis2sdmap
             var filename = Path.Combine(AppConfig.DestinationDirectory, "one.sdmap");
             File.Delete(filename);
 
+            Console.WriteLine("Transforming...");
             Directory.CreateDirectory(AppConfig.DestinationDirectory);
             FileUtil.EnumerateConfigFiles(AppConfig.IBatisXmlDirectory)
                 .Subscribe(file =>
@@ -27,6 +29,19 @@ namespace ibatis2sdmap
                         .ToObservable()
                         .Subscribe(x => SaveToOne(x));
                 });
+
+            Console.WriteLine("Parsing...");
+            var rt = new SdmapCompiler();
+            rt.AddSourceCode(File.ReadAllText(filename));
+            var ok = rt.EnsureCompiled();
+            if (ok.IsFailure)
+            {
+                Console.WriteLine("Compile failed: " + ok.Error);
+            }
+            else
+            {
+                Console.WriteLine("Compile succeed.");
+            }
         }
 
         public static void SaveToOne(IGrouping<string, SqlItem> v)
