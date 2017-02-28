@@ -37,7 +37,7 @@ namespace ibatis2sdmap.SqlSegments
             {
                 return
                     $"#{MacroName}<{Property}, sql{{" +
-                    $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
+                    $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))} " +
                     $"}}>";
             }
             else
@@ -46,7 +46,7 @@ namespace ibatis2sdmap.SqlSegments
                 {
                     return
                         $"#{MacroName}<{prop}, sql{{" +
-                        $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))}" +
+                        $"{Prepend} {string.Concat(Segments.Select(x => x.Emit()))} " +
                         $"}}>";
                 }));
             }
