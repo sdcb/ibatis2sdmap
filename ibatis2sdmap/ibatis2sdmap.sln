@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C13E18A9-4CFA-4A82-B092-9B735AA33262}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BCE8318-852E-4666-852F-23D2C5942C3E}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ibatis2sdmap", "src\ibatis2sdmap\ibatis2sdmap.xproj", "{2F01F8BC-D3F6-41BD-A81D-229F618D2F2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ibatis2sdmap", "src\ibatis2sdmap\ibatis2sdmap.csproj", "{2F01F8BC-D3F6-41BD-A81D-229F618D2F2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
