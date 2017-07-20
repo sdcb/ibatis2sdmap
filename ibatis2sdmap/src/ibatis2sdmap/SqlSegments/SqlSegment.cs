@@ -23,8 +23,11 @@ namespace ibatis2sdmap.SqlSegments
                 {
                     case "isPropertyAvailable":
                         return new PredicateSegment(xe, "hasProp");
+                    case "isNotPropertyAvailable":
+                        return new PredicateSegment(xe, "hasNoProp");
                     case "isNull":
                     case "isNotNull":
+                        return new IfSegment(xe, xe.Name.LocalName);
                     case "isEmpty":
                     case "isNotEmpty":
                         return new PredicateSegment(xe, xe.Name.LocalName);
@@ -32,6 +35,10 @@ namespace ibatis2sdmap.SqlSegments
                     case "isNotEqual":
                     case "isLike":
                     case "isNotLike":
+                    case "isLessThan":
+                    case "isGreaterEqual":
+                    case "isGreaterThan":
+                    case "isLessEqual":
                         return new PredicateValSegment(xe, xe.Name.LocalName);
                     case "include":
                         return new IncludeSegment(xe);

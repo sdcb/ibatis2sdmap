@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ibatis2sdmap": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\Public\\Nwt\\cache\\recv\\喻毅\\SqlMaps"
+    }
+  }
+}

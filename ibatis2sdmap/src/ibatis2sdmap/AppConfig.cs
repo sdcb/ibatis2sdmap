@@ -19,7 +19,7 @@ namespace ibatis2sdmap
             Configuration = builder.Build();
         }
 
-        public static string IBatisXmlDirectory => Configuration[nameof(IBatisXmlDirectory)];
+        public static string IBatisXmlDirectory => Environment.GetCommandLineArgs()[1];
 
         public static string DestinationDirectory => Configuration[nameof(DestinationDirectory)];
 
