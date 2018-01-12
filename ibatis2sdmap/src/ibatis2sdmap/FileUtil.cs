@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ibatis2sdmap
 {
-    public static class FileUtil
+    internal static class FileUtil
     {
         public static IObservable<string> EnumerateConfigFiles(string sourceDirectory)
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ibatis2sdmap
 {
-    public static class AppConfig
+    internal static class AppConfig
     {
         public static IConfigurationRoot Configuration { get; set; }
 

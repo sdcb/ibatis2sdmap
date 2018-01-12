@@ -10,12 +10,15 @@ using System.Xml.Linq;
 
 namespace ibatis2sdmap
 {
-    public class Program
+    internal class Program
     {
         public static void Main(string[] args)
         {
             //OneConverter.Convert();
-            FolderConverter.Convert();
+            //FolderConverter.Convert();
+            var converted = SdmapConverter.IBatisToSdmap(
+                File.ReadAllText(@"C:\Users\Public\Nwt\cache\recv\喻毅\SqlMaps\ClientSearch.config"));
+            Console.WriteLine(converted);
         }
     }
 }

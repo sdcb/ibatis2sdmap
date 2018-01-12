@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace ibatis2sdmap
 {
-    public class SqlItem
+    internal class SqlItem
     {
         public string Namespace { get; set; }
 
